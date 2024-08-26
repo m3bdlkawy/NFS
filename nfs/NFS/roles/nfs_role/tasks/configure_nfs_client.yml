@@ -1,0 +1,51 @@
+  - name: Create mount directory on Debian-based systems
+    ansible.builtin.file:
+      path: "{{ nfs_mount_dir }}"
+      state: directory
+      mode: '0755'
+    when: nfs_os_family == "Debian"
+
+  - name: Create mount directory on Red Hat-based systems
+    ansible.builtin.file:
+      path: "{{ nfs_mount_dir }}"
+      state: directory
+      mode: '0755'
+    when: nfs_os_family == "RedHat"
+
+  - name: Set master IP address
+    set_fact:
+      master_ip: "{{ hostvars['master']['ansible_default_ipv4']['address'] }}"
+    when: "'master' in group_names"
+
+  - name: Mount NFS share on Debian-based systems
+    ansible.builtin.mount:
+      path: "{{ nfs_mount_dir }}"
+      src: "{{ master_ip }}:{{ nfs_export_dir }}"
+      fstype: nfs
+      opts: defaults
+      state: mounted
+    when: nfs_os_family == "Debian"
+
+  - name: Mount NFS share on Red Hat-based systems
+    ansible.builtin.mount:
+      path: "{{ nfs_mount_dir }}"
+      src: "{{ master_ip }}:{{ nfs_export_dir }}"
+      fstype: nfs
+      opts: defaults
+      state: mounted
+    when: nfs_os_family == "RedHat"
+  - name: Ensure export directory exists
+    ansible.builtin.file:
+      path: "{{ nfs_export_dir }}"
+      state: directory
+      mode: '0755'
+    when: nfs_os_family == "Debian"
+
+  - name: Configure NFS server exports
+    ansible.builtin.template:
+      src: exports.j2
+      dest: /etc/exports
+    notify:
+      - Reload NFS exports
+      - Restart NFS server
+    when: nfs_os_family == "Debian"

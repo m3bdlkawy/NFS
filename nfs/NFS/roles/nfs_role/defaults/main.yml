@@ -1,0 +1,5 @@
+nfs_export_dir: /srv/nfs
+nfs_mount_dir: /mnt/nfs
+nfs_network: 192.168.1.0/24
+nfs_options: rw,sync,no_root_squash
+nfs_os_family: "{{ ansible_facts['os_family'] }}"

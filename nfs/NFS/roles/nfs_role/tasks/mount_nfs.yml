@@ -1,0 +1,17 @@
+- name: Ensure NFS share is mounted on Debian-based systems
+  ansible.builtin.mount:
+    path: "{{ nfs_mount_dir }}"
+    src: "{{ hostvars['master']['ansible_default_ipv4']['address'] }}:{{ nfs_export_dir }}"
+    fstype: nfs
+    opts: defaults
+    state: mounted
+  when: nfs_os_family == "Debian"
+
+- name: Ensure NFS share is mounted on Red Hat-based systems
+  ansible.builtin.mount:
+    path: "{{ nfs_mount_dir }}"
+    src: "{{ hostvars['master']['ansible_default_ipv4']['address'] }}:{{ nfs_export_dir }}"
+    fstype: nfs
+    opts: defaults
+    state: mounted
+  when: nfs_os_family == "RedHat"

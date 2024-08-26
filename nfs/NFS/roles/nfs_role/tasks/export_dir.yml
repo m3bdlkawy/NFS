@@ -1,0 +1,13 @@
+- name: Ensure export directory exists on Debian-based systems
+  ansible.builtin.file:
+    path: "{{ nfs_export_dir }}"
+    state: directory
+    mode: '0755'
+  when: nfs_os_family == "Debian"
+
+- name: Ensure export directory exists on Red Hat-based systems
+  ansible.builtin.file:
+    path: "{{ nfs_export_dir }}"
+    state: directory
+    mode: '0755'
+  when: nfs_os_family == "RedHat"

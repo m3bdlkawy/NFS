@@ -1,0 +1,16 @@
+- name: Install NFS packages on Debian-based systems
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - nfs-kernel-server
+    - nfs-common
+  when: nfs_os_family == "Debian"
+
+- name: Install NFS packages on Red Hat-based systems
+  ansible.builtin.yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - nfs-utils
+  when: nfs_os_family == "RedHat"

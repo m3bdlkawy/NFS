@@ -1,0 +1,22 @@
+---
+- name: Restart NFS server on Debian-based systems
+  ansible.builtin.systemd:
+    name: nfs-kernel-server
+    state: restarted
+  when: nfs_os_family == "Debian"
+
+- name: Restart NFS server on Red Hat-based systems
+  ansible.builtin.systemd:
+    name: nfs-server
+    state: restarted
+  when: nfs_os_family == "RedHat"
+
+- name: Reload NFS exports on Debian-based systems
+  ansible.builtin.command:
+    cmd: exportfs -r
+  when: nfs_os_family == "Debian"
+
+- name: Reload NFS exports on Red Hat-based systems
+  ansible.builtin.command:
+    cmd: exportfs -r
+  when: nfs_os_family == "RedHat"

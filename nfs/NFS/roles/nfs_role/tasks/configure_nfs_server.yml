@@ -1,0 +1,17 @@
+- name: Configure NFS server exports on Debian-based systems
+  ansible.builtin.template:
+    src: exports.j2
+    dest: /etc/exports
+  notify:
+    - Restart NFS server on Debian-based systems
+    - Reload NFS exports on Debian-based systems
+  when: nfs_os_family == "Debian"
+
+- name: Configure NFS server exports on Red Hat-based systems
+  ansible.builtin.template:
+    src: exports.j2
+    dest: /etc/exports
+  notify:
+    - Restart NFS server on Red Hat-based systems
+    - Reload NFS exports on Red Hat-based systems
+  when: nfs_os_family == "RedHat"

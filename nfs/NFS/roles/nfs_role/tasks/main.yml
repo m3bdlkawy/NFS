@@ -1,0 +1,7 @@
+---
+- include_tasks: install.yml
+- include_tasks: configure_nfs_server.yml
+- include_tasks: export_dir.yml
+- include_tasks: configure_nfs_client.yml
+- include_tasks: mount_nfs.yml
+
